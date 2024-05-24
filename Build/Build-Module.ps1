@@ -1,4 +1,4 @@
-﻿Build-Module -ModuleName 'PowerPUG' {
+Build-Module -ModuleName 'PowerPUG' {
     # Usual defaults as per standard module
     $Manifest = [ordered] @{
         ModuleVersion          = '1.0.0'
