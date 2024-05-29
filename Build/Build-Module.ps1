@@ -1,13 +1,13 @@
 Build-Module -ModuleName 'PowerPUG' {
     # Usual defaults as per standard module
     $Manifest = [ordered] @{
-        ModuleVersion          = '1.0.0'
+        ModuleVersion          = '0.0.1.1'
         CompatiblePSEditions   = @('Desktop', 'Core')
         GUID                   = '3f8afba8-e266-4a4b-9f09-b2d7ab35eba9'
-        Author                 = 'Author'
-        CompanyName            = 'CompanyName'
-        Copyright              = "(c) 2011 - $((Get-Date).Year) Author @ CompanyName. All rights reserved."
-        Description            = 'Simple project PowerPUG'
+        Author                 = 'Jake Hildreth'
+        CompanyName            = ''
+        Copyright              = "(c) 2023 - $((Get-Date).Year) Jake Hildreth. All rights reserved."
+        Description            = 'PowerPUG helps AD Admins use the Protected Users Group safely.'
         PowerShellVersion      = '5.1'
         Tags                   = @('Windows', 'MacOS', 'Linux')
     }
@@ -27,6 +27,7 @@ Build-Module -ModuleName 'PowerPUG' {
     #New-ConfigurationModule -Type ApprovedModule -Name 'PSSharedGoods', 'PSWriteColor', 'Connectimo', 'PSUnifi', 'PSWebToolbox', 'PSMyPassword'
 
     #New-ConfigurationModuleSkip -IgnoreFunctionName 'Invoke-Formatter', 'Find-Module' -IgnoreModuleName 'platyPS'
+    New-ConfigurationModuleSkip -IgnoreModuleName 'Microsoft.PowerShell.Utility'
 
     $ConfigurationFormat = [ordered] @{
         RemoveComments                              = $false
@@ -79,6 +80,6 @@ Build-Module -ModuleName 'PowerPUG' {
     #New-ConfigurationArtefact -Type Packed -Enable -Path "$PSScriptRoot\..\Artefacts\Packed" -IncludeTagName
 
     # global options for publishing to github/psgallery
-    #New-ConfigurationPublish -Type PowerShellGallery -FilePath 'C:\Support\Important\PowerShellGalleryAPI.txt' -Enabled:$false
+    New-ConfigurationPublish -Type PowerShellGallery -FilePath 'C:\Users\jake.BLUETUXEDO\Documents\PowerShellGalleryAPI.txt' -Enabled:$false
     #New-ConfigurationPublish -Type GitHub -FilePath 'C:\Support\Important\GitHubAPI.txt' -UserName 'CompanyName' -Enabled:$false
 }
