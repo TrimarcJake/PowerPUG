@@ -15,5 +15,14 @@
             Tags = @('Windows', 'MacOS', 'Linux')
         }
     }
+    RequiredModules      = @(@{
+            Guid          = 'eefcb906-b326-4e99-9f54-8b4bb6ef3c6d'
+            ModuleName    = 'Microsoft.PowerShell.Management'
+            ModuleVersion = '3.1.0.0'
+        }, @{
+            Guid          = '1da87e53-152b-403e-98dc-74d7b4d63d59'
+            ModuleName    = 'Microsoft.PowerShell.Utility'
+            ModuleVersion = '3.1.0.0'
+        })
     RootModule           = 'PowerPUG.psm1'
 }

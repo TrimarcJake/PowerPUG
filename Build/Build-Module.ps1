@@ -15,6 +15,8 @@ Build-Module -ModuleName 'PowerPUG' {
 
     # Add standard module dependencies (directly, but can be used with loop as well)
     #New-ConfigurationModule -Type RequiredModule -Name 'PSSharedGoods' -Guid 'Auto' -Version 'Latest'
+    New-ConfigurationModule -Type RequiredModule -Name 'Microsoft.PowerShell.Management' -Guid 'Auto' -Version 'Latest'
+    New-ConfigurationModule -Type RequiredModule -Name 'Microsoft.PowerShell.Utility' -Guid 'Auto' -Version 'Latest'
 
     # Add external module dependencies, using loop for simplicity
     #foreach ($Module in @('Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.Archive', 'Microsoft.PowerShell.Management', 'Microsoft.PowerShell.Security')) {
@@ -27,7 +29,8 @@ Build-Module -ModuleName 'PowerPUG' {
     #New-ConfigurationModule -Type ApprovedModule -Name 'PSSharedGoods', 'PSWriteColor', 'Connectimo', 'PSUnifi', 'PSWebToolbox', 'PSMyPassword'
 
     #New-ConfigurationModuleSkip -IgnoreFunctionName 'Invoke-Formatter', 'Find-Module' -IgnoreModuleName 'platyPS'
-    New-ConfigurationModuleSkip -IgnoreModuleName 'Microsoft.PowerShell.Utility'
+    # New-ConfigurationModuleSkip -IgnoreModuleName 'Microsoft.PowerShell.Utility'
+    # New-ConfigurationModuleSkip -IgnoreModuleName 'Microsoft.PowerShell.ConsoleGuiTools'
 
     $ConfigurationFormat = [ordered] @{
         RemoveComments                              = $false
@@ -80,6 +83,6 @@ Build-Module -ModuleName 'PowerPUG' {
     #New-ConfigurationArtefact -Type Packed -Enable -Path "$PSScriptRoot\..\Artefacts\Packed" -IncludeTagName
 
     # global options for publishing to github/psgallery
-    New-ConfigurationPublish -Type PowerShellGallery -FilePath 'C:\Users\jake.BLUETUXEDO\Documents\PowerShellGalleryAPI.txt' -Enabled:$false
-    #New-ConfigurationPublish -Type GitHub -FilePath 'C:\Support\Important\GitHubAPI.txt' -UserName 'CompanyName' -Enabled:$false
+    # New-ConfigurationPublish -Type PowerShellGallery -FilePath '$PSScriptRoot\keys\PowerShellGalleryAPI.txt' -Enabled:$false
+    # New-ConfigurationPublish -Type GitHub -FilePath 'C:\Support\Important\GitHubAPI.txt' -UserName 'CompanyName' -Enabled:$false
 }
