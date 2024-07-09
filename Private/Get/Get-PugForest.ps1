@@ -8,5 +8,5 @@ function Get-PugForest {
 
     $PugForest = [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
 
-    $PugForest
+    $PugForest 
 }

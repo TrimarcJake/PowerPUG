@@ -81,7 +81,8 @@ Build-Module -ModuleName 'PowerPUG' {
 
     #New-ConfigurationArtefact -Type Unpacked -Enable -Path "$PSScriptRoot\..\Artefacts\Unpacked" #-RequiredModulesPath "$PSScriptRoot\..\Artefacts\Modules"
     #New-ConfigurationArtefact -Type Packed -Enable -Path "$PSScriptRoot\..\Artefacts\Packed" -IncludeTagName
-
+    New-ConfigurationArtefact -Type Script -Enable -Path "$PSScriptRoot\..\Artefacts\Script" -ScriptName "Invoke-<ModuleName>.ps1" # -PreScriptMerge $PreScriptMerge -PostScriptMerge $PostScriptMerge 
+    
     # global options for publishing to github/psgallery
     # New-ConfigurationPublish -Type PowerShellGallery -FilePath '$PSScriptRoot\keys\PowerShellGalleryAPI.txt' -Enabled:$false
     # New-ConfigurationPublish -Type GitHub -FilePath 'C:\Support\Important\GitHubAPI.txt' -UserName 'CompanyName' -Enabled:$false

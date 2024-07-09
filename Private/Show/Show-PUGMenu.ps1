@@ -1,8 +1,8 @@
-using namespace Terminal.Gui
+# using namespace Terminal.Gui
 function Show-PUGMenu {
-    #requires -Modules Microsoft.PowerShell.ConsoleGuiTools
-    $Module = (Get-Module Microsoft.PowerShell.ConsoleGuiTools -List).ModuleBase
-    Add-Type -Path (Join-Path $Module Terminal.Gui.dll)
+    # #requires -Modules Microsoft.PowerShell.ConsoleGuiTools
+    # $Module = (Get-Module Microsoft.PowerShell.ConsoleGuiTools -List).ModuleBase
+    # Add-Type -Path (Join-Path $Module Terminal.Gui.dll)
 
     # Initialize the window
     [Application]::Init()
