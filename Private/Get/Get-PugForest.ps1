@@ -1,12 +1,18 @@
 function Get-PugForest {
     [CmdletBinding()]
     param(
-        [string]$ForestName
     )
 
     #requires -Version 5
 
-    $PugForest = [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
+    begin {
+    }
 
-    $PugForest 
+    process {
+        $PugForest = [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
+    }
+
+    end {
+        $PugForest
+    } 
 }
