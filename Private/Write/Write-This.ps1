@@ -4,7 +4,7 @@ function Write-This {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Support using Write-Host and colors for interactive scripts.')]
     [OutputType([string])]
         param (
-            # The message to display and write to a log
+            # The message to display and/or write to a log
             [Parameter(Mandatory, Position = 0)]
             [string]
             $LogText,
