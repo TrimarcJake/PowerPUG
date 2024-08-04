@@ -2,7 +2,7 @@
     AliasesToExport      = @()
     Author               = 'Jake Hildreth'
     CmdletsToExport      = @()
-CompanyName              = ''
+    CompanyName          = ''
     CompatiblePSEditions = @('Desktop', 'Core')
     Copyright            = '(c) 2023 - 2024 Jake Hildreth. All rights reserved.'
     Description          = 'PowerPUG helps AD Admins use the Protected Users Group safely.'
