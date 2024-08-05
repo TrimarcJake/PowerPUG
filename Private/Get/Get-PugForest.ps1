@@ -1,4 +1,5 @@
 function Get-PugForest {
+    # TODO Accept other forests in -ForestFQDN parameter
     [CmdletBinding()]
     param(
     )
@@ -9,10 +10,9 @@ function Get-PugForest {
     }
 
     process {
-        $PugForest = [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
+        [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
     }
 
     end {
-        $PugForest
     } 
 }
