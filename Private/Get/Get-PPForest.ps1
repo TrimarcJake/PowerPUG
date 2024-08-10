@@ -10,8 +10,8 @@ function Get-PPForest {
     }
 
     process {
-        $PugForest = [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
-        Write-Output $PugForest
+        $PPForest = [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
+        Write-Output $PPForest
     }
 
     end {
