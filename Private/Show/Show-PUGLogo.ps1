@@ -1,4 +1,4 @@
-function Show-PUGLogo {
+function Show-PugLogo {
     param(
         [string]$Version
     )
