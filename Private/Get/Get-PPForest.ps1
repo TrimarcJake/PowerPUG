@@ -1,4 +1,4 @@
-function Get-PugForest {
+function Get-PPForest {
     # TODO Accept other forests in -ForestFQDN parameter
     [CmdletBinding()]
     param(
