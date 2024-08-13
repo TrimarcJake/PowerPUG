@@ -1,4 +1,19 @@
 function Get-PPForest {
+    <#
+        .SYNOPSIS
+
+        .DESCRIPTION
+
+        .PARAMETER
+
+        .INPUTS
+
+        .OUTPUTS
+
+        .EXAMPLE
+
+        .LINK
+    #>
     # TODO Accept other forests in -ForestFQDN parameter
     [CmdletBinding()]
     param(

@@ -1,4 +1,19 @@
 function Show-PPLogo {
+    <#
+        .SYNOPSIS
+
+        .DESCRIPTION
+
+        .PARAMETER
+
+        .INPUTS
+
+        .OUTPUTS
+
+        .EXAMPLE
+
+        .LINK
+    #>
     param(
         [string]$Version
     )

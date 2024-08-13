@@ -1,4 +1,19 @@
 function Read-PPHost {
+    <#
+        .SYNOPSIS
+
+        .DESCRIPTION
+
+        .PARAMETER
+
+        .INPUTS
+
+        .OUTPUTS
+
+        .EXAMPLE
+
+        .LINK
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory,Position=0)]

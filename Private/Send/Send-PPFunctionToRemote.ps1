@@ -1,4 +1,19 @@
 function Test-PPDcOs {
+    <#
+        .SYNOPSIS
+
+        .DESCRIPTION
+
+        .PARAMETER
+
+        .INPUTS
+
+        .OUTPUTS
+
+        .EXAMPLE
+
+        .LINK
+    #>
     [CmdletBinding()]
     param (
         [Parameter(ValueFromPipeline)]

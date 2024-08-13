@@ -1,5 +1,21 @@
 # using namespace Terminal.Gui
 function Show-PUGMenu {
+    <#
+        .SYNOPSIS
+
+        .DESCRIPTION
+
+        .PARAMETER
+
+        .INPUTS
+
+        .OUTPUTS
+
+        .EXAMPLE
+
+        .LINK
+    #>
+    
     # #requires -Modules Microsoft.PowerShell.ConsoleGuiTools
     # $Module = (Get-Module Microsoft.PowerShell.ConsoleGuiTools -List).ModuleBase
     # Add-Type -Path (Join-Path $Module Terminal.Gui.dll)
