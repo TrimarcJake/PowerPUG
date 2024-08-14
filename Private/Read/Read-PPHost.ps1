@@ -4,7 +4,7 @@ function Read-PPHost {
 
         .DESCRIPTION
 
-        .PARAMETER
+        .PARAMETER Parameter
 
         .INPUTS
 

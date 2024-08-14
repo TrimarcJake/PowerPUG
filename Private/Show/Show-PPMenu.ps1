@@ -5,7 +5,7 @@ function Show-PUGMenu {
 
         .DESCRIPTION
 
-        .PARAMETER
+        .PARAMETER Parameter
 
         .INPUTS
 

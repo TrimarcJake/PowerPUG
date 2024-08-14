@@ -4,7 +4,7 @@ function Test-PPDcOs {
 
         .DESCRIPTION
 
-        .PARAMETER
+        .PARAMETER Parameter
 
         .INPUTS
 

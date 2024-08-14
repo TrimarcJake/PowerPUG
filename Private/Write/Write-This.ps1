@@ -4,7 +4,7 @@ function Write-This {
 
         .DESCRIPTION
 
-        .PARAMETER
+        .PARAMETER Parameter
 
         .INPUTS
 

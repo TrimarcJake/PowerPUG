@@ -4,7 +4,7 @@ function Get-PPForest {
 
         .DESCRIPTION
 
-        .PARAMETER
+        .PARAMETER Parameter
 
         .INPUTS
 

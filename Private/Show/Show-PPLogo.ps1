@@ -4,7 +4,7 @@ function Show-PPLogo {
 
         .DESCRIPTION
 
-        .PARAMETER
+        .PARAMETER Parameter
 
         .INPUTS
 
