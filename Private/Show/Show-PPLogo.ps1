@@ -19,5 +19,5 @@ function Show-PPLogo {
     )
 
    $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::UTF8
-   Write-Host "PowerPUG! v$Version" -ForegroundColor Magenta
+   Write-Host "PowerPUG! v<ModuleVersion>" -ForegroundColor Magenta
 }
