@@ -23,6 +23,10 @@
             Guid          = '1da87e53-152b-403e-98dc-74d7b4d63d59'
             ModuleName    = 'Microsoft.PowerShell.Utility'
             ModuleVersion = '3.1.0.0'
+        }, @{
+            Guid          = 'ca046f10-ca64-4740-8ff9-2565dba61a4f'
+            ModuleName    = 'Microsoft.PowerShell.Diagnostics'
+            ModuleVersion = '3.0.0.0'
         })
     RootModule           = 'PowerPUG.psm1'
 }

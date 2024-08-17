@@ -17,6 +17,7 @@ Build-Module -ModuleName 'PowerPUG' {
     #New-ConfigurationModule -Type RequiredModule -Name 'PSSharedGoods' -Guid 'Auto' -Version 'Latest'
     New-ConfigurationModule -Type RequiredModule -Name 'Microsoft.PowerShell.Management' -Guid 'Auto' -Version 'Latest'
     New-ConfigurationModule -Type RequiredModule -Name 'Microsoft.PowerShell.Utility' -Guid 'Auto' -Version 'Latest'
+    New-ConfigurationModule -Type RequiredModule -Name 'Microsoft.PowerShell.Diagnostics' -Guid 'Auto' -Version 'Latest'
 
     # Add external module dependencies, using loop for simplicity
     #foreach ($Module in @('Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.Archive', 'Microsoft.PowerShell.Management', 'Microsoft.PowerShell.Security')) {
