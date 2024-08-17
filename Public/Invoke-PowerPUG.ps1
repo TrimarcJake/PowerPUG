@@ -14,7 +14,7 @@ function Invoke-PowerPUG {
 
     #region get environmental info
     
-    $PPForest = Get-PPForest
-    $PPDomains = Get-PPDomain
-    $PPDc = Get-PPDc
+    $Forest = Get-PPForest
+    $Domains = Get-PPDomain
+    $Dc = Get-PPDc
 }

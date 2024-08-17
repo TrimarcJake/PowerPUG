@@ -25,8 +25,8 @@ function Get-PPForest {
     }
 
     process {
-        $PPForest = [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
-        Write-Output $PPForest
+        $Forest = [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
+        Write-Output $Forest
     }
 
     end {
