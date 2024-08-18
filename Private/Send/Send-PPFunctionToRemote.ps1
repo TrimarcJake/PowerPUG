@@ -17,14 +17,14 @@ function Test-PPDcOs {
     [CmdletBinding()]
     param (
         [Parameter(ValueFromPipeline)]
-        [object]$Dcs
+        [object]$Dc
     )
 
     #requires -Version 5
 
     begin {
-        if ($null -eq $Dcs) {
-            $Dcs = Get-PPDc
+        if ($null -eq $Dc) {
+            $Dc = Get-PPDc
         }
     }
 
