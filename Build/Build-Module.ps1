@@ -1,7 +1,7 @@
 Build-Module -ModuleName 'PowerPUG' {
     # Usual defaults as per standard module
     $Manifest = [ordered] @{
-        ModuleVersion          = '0.0.1.1'
+        ModuleVersion          = '0.1.1.1'
         CompatiblePSEditions   = @('Desktop', 'Core')
         GUID                   = '3f8afba8-e266-4a4b-9f09-b2d7ab35eba9'
         Author                 = 'Jake Hildreth'
@@ -15,14 +15,11 @@ Build-Module -ModuleName 'PowerPUG' {
 
     # Add standard module dependencies (directly, but can be used with loop as well)
     #New-ConfigurationModule -Type RequiredModule -Name 'PSSharedGoods' -Guid 'Auto' -Version 'Latest'
-    New-ConfigurationModule -Type RequiredModule -Name 'Microsoft.PowerShell.Management' -Guid 'Auto' -Version 'Latest'
-    New-ConfigurationModule -Type RequiredModule -Name 'Microsoft.PowerShell.Utility' -Guid 'Auto' -Version 'Latest'
-    New-ConfigurationModule -Type RequiredModule -Name 'Microsoft.PowerShell.Diagnostics' -Guid 'Auto' -Version 'Latest'
 
     # Add external module dependencies, using loop for simplicity
-    #foreach ($Module in @('Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.Archive', 'Microsoft.PowerShell.Management', 'Microsoft.PowerShell.Security')) {
-    #    New-ConfigurationModule -Type ExternalModule -Name $Module
-    #}
+    foreach ($Module in @('Microsoft.PowerShell.Diagnostics', 'Microsoft.PowerShell.Utility', 'Microsoft.PowerShell.Archive', 'Microsoft.PowerShell.Management', 'Microsoft.PowerShell.Security')) {
+       New-ConfigurationModule -Type ExternalModule -Name $Module
+    }
 
     # Add approved modules, that can be used as a dependency, but only when specific function from those modules is used
     # And on that time only that function and dependant functions will be copied over
@@ -85,6 +82,6 @@ Build-Module -ModuleName 'PowerPUG' {
     New-ConfigurationArtefact -Type Script -Enable -Path "$PSScriptRoot\..\Artefacts\Script" -ScriptName "Invoke-<ModuleName>.ps1" # -PreScriptMerge $PreScriptMerge -PostScriptMerge $PostScriptMerge
     
     # global options for publishing to github/psgallery
-    # New-ConfigurationPublish -Type PowerShellGallery -FilePath '$PSScriptRoot\keys\PowerShellGalleryAPI.txt' -Enabled:$false
+    # New-ConfigurationPublish -Type PowerShellGallery -FilePath 'C:\Users\Administrator\Documents\PowerShellGalleryAPI.txt' -Enabled:$false
     # New-ConfigurationPublish -Type GitHub -FilePath 'C:\Support\Important\GitHubAPI.txt' -UserName 'CompanyName' -Enabled:$false
 }
