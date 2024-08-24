@@ -1,20 +1,16 @@
 function Invoke-PowerPUG {
     [CmdletBinding()]
     param (
-        [Parameter(ValueFromPipeline)]
-        [string]$ForestFQDN,
-        [System.Management.Automation.PSCredential]$Credential
+        # TODO accept ForestFQDN as string
+        # [Parameter(ValueFromPipeline)]
+        # [string]$ForestFQDN,
+        # [System.Management.Automation.PSCredential]$Credential
     )
 
-    #region pretty stuff
+    #region show logo
     Show-PPLogo -Version (Get-Date -Format yyyy.M.d)
-    #endregion
+    #endregion show logo
 
-    # TODO accept ForestFQDN as string
-
-    #region get environmental info
-    
-    $Forest = Get-PPForest
-    $Domains = Get-PPDomain
-    $Dc = Get-PPDc
+    $Environment = Get-PPEnvironment
+    Test-PPEnvironment -Environment $Environment
 }
