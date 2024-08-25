@@ -11,6 +11,6 @@ function Invoke-PowerPUG {
     Show-PPLogo -Version (Get-Date -Format yyyy.M.d)
     #endregion show logo
 
-    $Environment = Get-PPEnvironment
-    Test-PPEnvironment -Environment $Environment
+    Get-PPEnvironment | Test-PPEnvironment
+    Get-PPDCLogConfiguration | Test-PPDCLogConfiguration
 }
