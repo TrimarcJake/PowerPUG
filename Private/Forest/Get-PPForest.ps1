@@ -31,5 +31,5 @@ function Get-PPForest {
     }
 
     end {
-    } 
+        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    } 
 }

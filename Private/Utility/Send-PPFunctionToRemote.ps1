@@ -51,5 +51,5 @@ $($Function.Definition)
     }
     
     end {
-    }
+        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    }
 }
