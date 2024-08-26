@@ -23,7 +23,8 @@ function Read-PPHost {
     #requires -Version 5
 
     begin {
-    }
+        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+     }
 
     process {
         Read-Host -Prompt $(Write-Host "[?] $Message`n> " -ForegroundColor Blue -BackgroundColor DarkGray -NoNewLine)

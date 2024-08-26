@@ -22,7 +22,8 @@ function Get-PPForest {
     #requires -Version 5
 
     begin {
-    }
+        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+     }
 
     process {
         $Forest = [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()

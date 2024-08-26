@@ -26,7 +26,8 @@ function Send-PPFunctionToRemote {
     #requires -Version 5
 
     begin {
-    }
+        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+     }
 
     process {
         $FunctionName | Foreach-Object {
