@@ -13,6 +13,6 @@ function Invoke-PowerPUG {
 
     $Environment = Get-PPEnvironment
     Test-PPEnvironment -Environment $Environment
-    $DCLogConfiguration = Get-PPDCLogConfiguration
+    $DCLogConfiguration = Get-PPDCLogConfiguration -DC $Environment.Dcs
     Test-PPDCLogConfiguration -Configuration $DCLogConfiguration
 }
