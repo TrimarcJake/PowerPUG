@@ -34,7 +34,7 @@ function Send-PPFunctionToRemote {
         $FunctionName | Foreach-Object {
             try {
                 $Function = Get-Command -Name $_
-                if ($Function) {
+               if ($Function) {
                     $Definition = @"
 $($Function.CommandType) $_ {
 $($Function.Definition)
