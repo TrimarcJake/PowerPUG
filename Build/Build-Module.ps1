@@ -1,7 +1,7 @@
 Build-Module -ModuleName 'PowerPUG' {
     # Usual defaults as per standard module
     $Manifest = [ordered] @{
-        ModuleVersion          = '0.1.1.1'
+        ModuleVersion          = (Get-Date -Format yyyy.M.d)
         CompatiblePSEditions   = @('Desktop', 'Core')
         GUID                   = '3f8afba8-e266-4a4b-9f09-b2d7ab35eba9'
         Author                 = 'Jake Hildreth'
