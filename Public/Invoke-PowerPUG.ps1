@@ -13,4 +13,6 @@ function Invoke-PowerPUG {
 
     $Environment = Get-PPEnvironment
     Test-PPEnvironment -Environment $Environment
+
+    Show-PPOutro
 }
