@@ -8,7 +8,7 @@
     Description          = 'PowerPUG helps AD Admins use the Protected Users Group safely.'
     FunctionsToExport    = 'Invoke-PowerPUG'
     GUID                 = '3f8afba8-e266-4a4b-9f09-b2d7ab35eba9'
-    ModuleVersion        = '2024.8.31'
+    ModuleVersion        = '2024.9.28'
     PowerShellVersion    = '5.1'
     PrivateData          = @{
         PSData = @{
