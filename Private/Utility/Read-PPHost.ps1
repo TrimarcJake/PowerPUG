@@ -16,7 +16,7 @@ function Read-PPHost {
     #>
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory,Position=0)]
+        [Parameter(Mandatory, Position = 0)]
         $Message
     )
 
@@ -24,7 +24,7 @@ function Read-PPHost {
 
     begin {
         Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
-     }
+    }
 
     process {
         Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."

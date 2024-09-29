@@ -1,5 +1,5 @@
 function Show-PPOutro {
-    <#
+  <#
         .SYNOPSIS
 
         .DESCRIPTION
@@ -14,12 +14,12 @@ function Show-PPOutro {
 
         .LINK
     #>
-    param(
-        [string]$Version
-    )
+  param(
+    [string]$Version
+  )
 
-    Read-Host 'Press Enter to Continue'
-    Write-Host @"
+  Read-Host 'Press Enter to Continue'
+  Write-Host @"
      @@@@@@@@@@@@@@@@@@@@                                     @@@@@@@@@@@@@@@@@@@  
     @@@@@@@@@@@@@@@@@@@&                                       @@@@@@@@@@@@@@@@@@@
    @@@@@@@@@@@@@@@@@@                                            %@@@@@@@@@@@@@@@@@

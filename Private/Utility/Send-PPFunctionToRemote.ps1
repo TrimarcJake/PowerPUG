@@ -19,7 +19,7 @@ function Send-PPFunctionToRemote {
     param (
         [Parameter(Mandatory)]
         [string[]]$FunctionName,
-        [Parameter(Mandatory,ValueFromPipeline)]
+        [Parameter(Mandatory, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [object[]]$Session
     )
@@ -28,14 +28,14 @@ function Send-PPFunctionToRemote {
 
     begin {
         Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
-     }
+    }
 
     process {
         Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $FunctionName | Foreach-Object {
             try {
                 $Function = Get-Command -Name $_
-               if ($Function) {
+                if ($Function) {
                     $Definition = @"
 $($Function.CommandType) $_ {
 $($Function.Definition)
@@ -53,5 +53,6 @@ $($Function.Definition)
     }
     
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    }
+        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+    }
 }

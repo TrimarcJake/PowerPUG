@@ -23,7 +23,7 @@ function Get-PPForest {
 
     begin {
         Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
-     }
+    }
 
     process {
         Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
@@ -32,5 +32,6 @@ function Get-PPForest {
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    } 
+        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+    } 
 }
