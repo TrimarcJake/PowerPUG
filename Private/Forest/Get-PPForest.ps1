@@ -22,16 +22,16 @@ function Get-PPForest {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $Forest = [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
         Write-Output $Forest
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     } 
 }

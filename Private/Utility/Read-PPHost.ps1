@@ -23,11 +23,11 @@ function Read-PPHost {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         Read-Host -Prompt $(Write-Host "[?] $Message`n> " -ForegroundColor Blue -BackgroundColor DarkGray -NoNewLine)
     }
 }
