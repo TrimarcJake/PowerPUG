@@ -18,6 +18,7 @@ Build-Module -ModuleName 'PowerPUG' {
 
     # Add external module dependencies, using loop for simplicity
     $RequiredModules = @(
+        'CimCmdlets',
         'Microsoft.PowerShell.Archive',
         'Microsoft.PowerShell.Diagnostics',
         'Microsoft.PowerShell.Management',

@@ -1,4 +1,408 @@
-﻿function Get-PPDC {
+﻿function Read-PPHost {
+    <#
+        .SYNOPSIS
+
+        .DESCRIPTION
+
+        .PARAMETER Parameter
+
+        .INPUTS
+
+        .OUTPUTS
+
+        .EXAMPLE
+
+        .LINK
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory, Position = 0)]
+        $Message
+    )
+
+    #requires -Version 5
+
+    begin {
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+    }
+
+    process {
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Read-Host -Prompt $(Write-Host "[?] $Message`n> " -ForegroundColor Blue -BackgroundColor DarkGray -NoNewline)
+    }
+}
+
+function Send-PPFunctionToRemote {
+    <#
+        .SYNOPSIS
+
+        .DESCRIPTION
+
+        .PARAMETER Parameter
+
+        .INPUTS
+
+        .OUTPUTS
+
+        .EXAMPLE
+
+        .LINK
+        https://matthewjdegarmo.com/powershell/2021/03/31/how-to-import-a-locally-defined-function-into-a-remote-powershell-session.html
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [string[]]$FunctionName,
+        [Parameter(Mandatory, ValueFromPipeline)]
+        [ValidateNotNullOrEmpty()]
+        [object[]]$Session
+    )
+
+    #requires -Version 5
+
+    begin {
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+    }
+
+    process {
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        $FunctionName | ForEach-Object {
+            try {
+                $Function = Get-Command -Name $_
+                if ($Function) {
+                    $Definition = @"
+$($Function.CommandType) $_ {
+$($Function.Definition)
+}
+"@                  
+                    Invoke-Command -Session $Session -ScriptBlock {
+                        param($LoadMe)
+                        . ([scriptblock]::Create($LoadMe))
+                    } -ArgumentList $Definition
+                }
+            }
+            catch {
+                throw $_
+            }
+        }
+    }
+    
+    end {
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+    }
+}
+
+function Show-PPLogo {
+    <#
+        .SYNOPSIS
+
+        .DESCRIPTION
+
+        .PARAMETER Parameter
+
+        .INPUTS
+
+        .OUTPUTS
+
+        .EXAMPLE
+
+        .LINK
+    #>
+    param(
+        [string]$Version
+    )
+
+    # Write-Host '' -BackgroundColor Black -ForegroundColor Red -NoNewline
+    # Write-Host '' -BackgroundColor Black -ForegroundColor DarkYellow -NoNewline
+    # Write-Host '' -BackgroundColor Black -ForegroundColor Yellow -NoNewline
+    # Write-Host '' -BackgroundColor Black -ForegroundColor Green -NoNewline
+    # Write-Host '' -BackgroundColor Black -ForegroundColor DarkGreen -NoNewline
+    # Write-Host '' -BackgroundColor Black -ForegroundColor Blue -NoNewline
+    # Write-Host '' -BackgroundColor Black -ForegroundColor DarkBlue -NoNewline
+    # Write-Host '' -BackgroundColor Black -ForegroundColor Magenta -NoNewline
+    # Write-Host '' -BackgroundColor Black -ForegroundColor DarkMagenta -NoNewline
+    # Write-Host
+
+    Write-Host '                                                                '
+
+    Write-Host '  ______ ' -BackgroundColor Black -ForegroundColor Red -NoNewline
+    Write-Host '       ' -BackgroundColor Black -ForegroundColor DarkYellow -NoNewline
+    Write-Host '         ' -BackgroundColor Black -ForegroundColor Yellow -NoNewline
+    Write-Host '      ' -BackgroundColor Black -ForegroundColor Green -NoNewline
+    Write-Host '     ' -BackgroundColor Black -ForegroundColor DarkGreen -NoNewline
+    Write-Host ' ______ ' -BackgroundColor Black -ForegroundColor Blue -NoNewline
+    Write-Host '_______ ' -BackgroundColor Black -ForegroundColor DarkBlue -NoNewline
+    Write-Host '_______ ' -BackgroundColor Black -ForegroundColor Magenta -NoNewline
+    Write-Host '__  ' -BackgroundColor Black -ForegroundColor DarkMagenta -NoNewline
+    Write-Host
+    
+    Write-Host ' |   __ \' -BackgroundColor Black -ForegroundColor Red -NoNewline
+    Write-Host '.-----.' -BackgroundColor Black -ForegroundColor DarkYellow -NoNewline
+    Write-Host '--.--.--.' -BackgroundColor Black -ForegroundColor Yellow -NoNewline
+    Write-Host '-----.' -BackgroundColor Black -ForegroundColor Green -NoNewline
+    Write-Host '----.' -BackgroundColor Black -ForegroundColor DarkGreen -NoNewline
+    Write-Host '|   __ \' -BackgroundColor Black -ForegroundColor Blue -NoNewline
+    Write-Host '   |   |' -BackgroundColor Black -ForegroundColor DarkBlue -NoNewline
+    Write-Host '     __|' -BackgroundColor Black -ForegroundColor Magenta -NoNewline
+    Write-Host '  | ' -BackgroundColor Black -ForegroundColor DarkMagenta -NoNewline
+    Write-Host
+
+    Write-Host ' |    __/' -BackgroundColor Black -ForegroundColor Red -NoNewline
+    Write-Host '|  _  |' -BackgroundColor Black -ForegroundColor DarkYellow -NoNewline
+    Write-Host '  |  |  |' -BackgroundColor Black -ForegroundColor Yellow -NoNewline
+    Write-Host '  -__|' -BackgroundColor Black -ForegroundColor Green -NoNewline
+    Write-Host '   _|' -BackgroundColor Black -ForegroundColor DarkGreen -NoNewline
+    Write-Host '|    __/' -BackgroundColor Black -ForegroundColor Blue -NoNewline
+    Write-Host '   |   |' -BackgroundColor Black -ForegroundColor DarkBlue -NoNewline
+    Write-Host '    |  |' -BackgroundColor Black -ForegroundColor Magenta -NoNewline
+    Write-Host '__| ' -BackgroundColor Black -ForegroundColor DarkMagenta -NoNewline
+    Write-Host
+
+    Write-Host ' |___|   ' -BackgroundColor Black -ForegroundColor Red -NoNewline
+    Write-Host '|_____|' -BackgroundColor Black -ForegroundColor DarkYellow -NoNewline
+    Write-Host '________|' -BackgroundColor Black -ForegroundColor Yellow -NoNewline
+    Write-Host '_____|' -BackgroundColor Black -ForegroundColor Green -NoNewline
+    Write-Host '__|  ' -BackgroundColor Black -ForegroundColor DarkGreen -NoNewline
+    Write-Host '|___|  ' -BackgroundColor Black -ForegroundColor Blue -NoNewline
+    Write-Host '|_______|' -BackgroundColor Black -ForegroundColor DarkBlue -NoNewline
+    Write-Host '_______|' -BackgroundColor Black -ForegroundColor Magenta -NoNewline
+    Write-Host '__| ' -BackgroundColor Black -ForegroundColor DarkMagenta -NoNewline
+    Write-Host
+    Write-Host "                                    v2024.10.9    " -BackgroundColor Black -ForegroundColor Magenta
+    Write-Host '                                                        ' -BackgroundColor Black
+}
+function Show-PPOutro {
+    <#
+        .SYNOPSIS
+
+        .DESCRIPTION
+
+        .PARAMETER Parameter
+
+        .INPUTS
+
+        .OUTPUTS
+
+        .EXAMPLE
+
+        .LINK
+    #>
+    param(
+        [string]$Version
+    )
+
+    Read-Host 'Press Enter to Continue'
+    Write-Host @"
+     @@@@@@@@@@@@@@@@@@@@                                     @@@@@@@@@@@@@@@@@@@  
+    @@@@@@@@@@@@@@@@@@@&                                       @@@@@@@@@@@@@@@@@@@
+   @@@@@@@@@@@@@@@@@@                                            %@@@@@@@@@@@@@@@@@
+   @@@@@@@@@@@@@@@@                                                 @@@@@@@@@@@@@@@
+   @@@@@@@@@@@@@                                                      %@@@@@@@@@@@@
+   @@@@@@@@@@@         https://github.com/TrimarcJake/PowerPUG           @@@@@@@@@@
+   @@@@@@@@                                                                @@@@@@@@
+   @@@@@@                                                                     @@@@@
+   @@@           %@@@                                       @@@@                @@@
+                @@@@@                  @@@@@@@@#           @@@@(                   
+                @@@@@@.   ,@        @@@@@@@@@@@@@@        #@@@@@@    @@            
+                *@@@@@@@@@@,      @@@@@@@@@@@@@@@@@@@      @@@@@@@@@@@             
+                   @@@@@@      %@@@@@             @@@@@       @@@@@#               
+                             @@@@@@@@,           @@@@@@@@@                         
+                          (@@@@@@@@@@@@@      (@@@@@@@@@@@@@                       
+                        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%                    
+                     (@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                  
+                   @@@@@@@@@@@@@@@@@@@@@@@@.@@@@@@@@@@@@@@@@@@@@@@@&               
+                 @@@@@@@@@@@@@@@@@@@@@           @@@@@@@@@@@@@@@@@@@@,             
+                @@@@@@@@@@@@@@@@@@@                 @@@@@@@@@@@@@@@@@@             
+                *@@@@@@@@@@@@@@@@@@@.             @@@@@@@@@@@@@@@@@@@@             
+                 #@@@@@@@@@@@@@@@@@@@@@,       @@@@@@@@@@@@@@@@@@@@@@              
+                    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#
+"@ -ForegroundColor Magenta
+}
+function Test-PPIsDc {
+    <#
+        .SYNOPSIS
+
+        .DESCRIPTION
+
+        .PARAMETER Parameter
+
+        .INPUTS
+
+        .OUTPUTS
+
+        .EXAMPLE
+
+        .LINK
+    #>
+    [CmdletBinding()]
+    param (
+    )
+
+    #requires -Version 5
+
+    begin {
+    }
+
+    process {
+    }
+
+    end {
+        if (Get-CimInstance -Class CIM_OperatingSystem | Where-Object ProductType -EQ 2) {
+            Write-Output $true
+        }
+        else {
+            Write-Output $false
+        }
+    }
+}
+
+function Test-PPIsElevated {
+    <#
+        .SYNOPSIS
+
+        .DESCRIPTION
+
+        .PARAMETER Parameter
+
+        .INPUTS
+
+        .OUTPUTS
+
+        .EXAMPLE
+
+        .LINK
+    #>
+    [CmdletBinding()]
+    param (
+    )
+
+    #requires -Version 5
+
+    begin {
+    }
+
+    process {
+    }
+
+    end {
+        ([Security.Principal.WindowsPrincipal]::New([Security.Principal.WindowsIdentity]::GetCurrent())).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    }
+}
+
+function Write-PPHost {
+    <#
+        .SYNOPSIS
+
+        .DESCRIPTION
+
+        .PARAMETER Parameter
+
+        .INPUTS
+
+        .OUTPUTS
+
+        .EXAMPLE
+
+        .LINK
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory, Position = 0)]
+        [ValidateSet('Info', 'Warning', 'Success', 'Error', 'Code', 'Remediation', 'Title', 'Subtitle')]
+        $Type,
+        [Parameter(Mandatory, Position = 1)]
+        $Message
+    )
+
+    #requires -Version 5
+
+    begin {
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        $ForegroundColor = $Host.UI.RawUI.ForegroundColor
+        $BackgroundColor = $Host.UI.RawUI.BackgroundColor
+    }
+
+    process {
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        $Status = switch ($Type) {
+            'Info' {
+                @{
+                    Decoration      = 'i'
+                    ForegroundColor = 'Cyan'
+                    BackgroundColor = $BackgroundColor
+                }
+            }
+            'Warning' {
+                @{
+                    Decoration      = '!'
+                    ForegroundColor = 'DarkYellow'
+                    BackgroundColor = $BackgroundColor
+                }
+            }
+            'Success' {
+                @{
+                    Decoration      = '+'
+                    ForegroundColor = 'Green'
+                    BackgroundColor = $BackgroundColor
+                }
+            }
+            'Error' {
+                @{
+                    Decoration      = 'X'
+                    ForegroundColor = 'Red'
+                    BackgroundColor = $BackgroundColor
+                }
+            }
+            'Code' {
+                @{
+                    Decoration      = '>'
+                    ForegroundColor = 'Black'
+                    BackgroundColor = 'Gray'
+                }
+            }
+            'Prompt' {
+                @{
+                    Decoration      = '?'
+                    ForegroundColor = 'Blue'
+                    BackgroundColor = 'Gray'
+                }
+            }
+            'Remediation' {
+                @{
+                    Decoration      = '~'
+                    ForegroundColor = 'DarkCyan'
+                    BackgroundColor = 'Gray'
+                }
+            }
+            'Title' {
+                @{
+                    Decoration      = '>'
+                    ForegroundColor = 'White'
+                    BackgroundColor = $BackgroundColor
+                }
+            }
+            'Subtitle' {
+                @{
+                    Decoration      = '>'
+                    ForegroundColor = 'DarkGray'
+                    BackgroundColor = $BackgroundColor
+                }
+            }
+        }
+
+        if ($VerbosePreference -eq 'Continue') {
+            $Decorator = "[$($Status.Decoration)]      [$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')]"
+        }
+        else {
+            $Decorator = "[$($Status.Decoration)]"
+        }
+
+        Write-Host "$Decorator $Message" -ForegroundColor $Status.ForegroundColor -BackgroundColor $Status.BackgroundColor -NoNewline
+        Write-Host -ForegroundColor $ForegroundColor -BackgroundColor $BackgroundColor
+    }
+}
+
+function Get-PPDC {
     <#
         .SYNOPSIS
 
@@ -24,14 +428,14 @@
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         if ($null -eq $Domain) {
             $Domain = Get-PPDomain
         }
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $Domain | ForEach-Object {
             $DirectoryContext = [System.DirectoryServices.ActiveDirectory.DirectoryContext]::New(0, $_.Name)
             [System.DirectoryServices.ActiveDirectory.DomainController]::FindAll($DirectoryContext) | ForEach-Object {
@@ -39,14 +443,14 @@
                     Write-Output $_
                 }
                 else {
-                    Write-Warning "$($_.Name) is not reachable. PowerPUG! will not attempt to analyze it for PUG readiness."
+                    Write-PPHost -Type Warning -Message "$($_.Name) is not reachable. PowerPUG! will not attempt to analyze it for PUG readiness."
                 }
             }
         }
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     }
 }
 
@@ -87,12 +491,12 @@ function Get-PPDCAuditPolicy {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $CsvTemp = New-TemporaryFile
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         Write-Output $Category -PipelineVariable cat | ForEach-Object {
             auditpol /get /category:$_ /r | Out-File $CsvTemp -Force
             $Auditpol = Import-Csv -Path $CsvTemp
@@ -104,7 +508,7 @@ function Get-PPDCAuditPolicy {
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         Remove-Item $CsvTemp
     }
 }
@@ -135,18 +539,19 @@ function Get-PPDCLogConfiguration {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         if ($null -eq $DC) {
             $DC = Get-PPDC
         }
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         Write-Output $DC -PipelineVariable domaincontroller | ForEach-Object {
             try {
                 $Session = New-PSSession -ComputerName $domaincontroller -ErrorAction Stop
                 Send-PPFunctionToRemote -FunctionName Get-PPDCAuditPolicy -Session $Session
+                Write-PPHost -Type Info -Message "Checking if $($_.Name) has Logon Auditing enabled."
                 Invoke-Command -Session $Session -ScriptBlock { Get-PPDCAuditPolicy }
             }
             catch {
@@ -155,7 +560,7 @@ function Get-PPDCLogConfiguration {
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
     }
 }
 function Get-PPDCNtlmLogon {
@@ -184,7 +589,7 @@ function Get-PPDCNtlmLogon {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         if ($null -eq $DC) {
             $DC = Get-PPDC
         }
@@ -192,15 +597,16 @@ function Get-PPDCNtlmLogon {
 
     process {
         $DC | ForEach-Object {
+            Write-PPHost -Type Info -Message "Gathering NTLM logon events from $($_.Name)."
             Invoke-Command -ComputerName $_ {
                 $NtlmFilter = @"
-                *[EventData
-                    [Data[@Name='AuthenticationPackageName']
-                    and (Data='NTLM')]
-                ]
-                [System
-                    [(EventID=4624)]
-                ]
+                    *[EventData
+                        [Data[@Name='AuthenticationPackageName']
+                        and (Data='NTLM')]
+                    ]
+                    [System
+                        [(EventID=4624)]
+                    ]
 "@
                 $Query = [System.Diagnostics.Eventing.Reader.EventLogQuery]::New('Security', 'LogName', $NtlmFilter)
                 $Reader = [System.Diagnostics.Eventing.Reader.EventLogReader]::New($Query) 
@@ -249,7 +655,7 @@ function Get-PPDCWeakKerberosLogon {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         if ($null -eq $DC) {
             $DC = Get-PPDC
         }
@@ -257,16 +663,17 @@ function Get-PPDCWeakKerberosLogon {
 
     process {
         $DC | ForEach-Object {
+            Write-PPHost -Type Info -Message "Gathering Weak Kerberos usage events from $($_.Name)."
             Invoke-Command -ComputerName $_ {
                 $KerberosFilter = @"
-                *[EventData
-                    [Data[@Name='TicketEncryptionType']!='0x12']
-                    [Data[@Name='TicketEncryptionType']!='0x11']
-                    [Data[@Name='TicketEncryptionType']!='0xFFFFFFFF']
-                ]
-                [System
-                    [(EventID=4768)]
-                ]
+                    *[EventData
+                        [Data[@Name='TicketEncryptionType']!='0x12']
+                        [Data[@Name='TicketEncryptionType']!='0x11']
+                        [Data[@Name='TicketEncryptionType']!='0xFFFFFFFF']
+                    ]
+                    [System
+                        [(EventID=4768)]
+                    ]
 "@
                 $Query = [System.Diagnostics.Eventing.Reader.EventLogQuery]::New('Security', 'LogName', $KerberosFilter)
                 $Reader = [System.Diagnostics.Eventing.Reader.EventLogReader]::New($Query) 
@@ -315,11 +722,11 @@ function Test-PPDCLogConfiguration {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $Configuration | ForEach-Object {
             if ( ($_.'Policy Target' -eq 'System') -and ($_.Category -eq 'Logon/Logoff') -and 
                 ($_.Subcategory -eq 'Logon') -and ($_.'Inclusion Setting' -eq 'Success and Failure')
@@ -335,7 +742,7 @@ function Test-PPDCLogConfiguration {
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
     }
 }
 
@@ -365,7 +772,7 @@ function Test-PPDCOS {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $DcOsWithPugArray = @(
             'Windows Server 2025 Standard',
             'Windows Server 2025 Datacenter',
@@ -381,7 +788,7 @@ function Test-PPDCOS {
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $DC | ForEach-Object {
             if ($DcOsWithPugArray -contains $_.OSVersion.ToString()) {
                 Write-Output $true
@@ -393,7 +800,7 @@ function Test-PPDCOS {
     }
     
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     }
 }
 
@@ -423,19 +830,20 @@ function Test-PPDCRemotingEnabled {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $DC | ForEach-Object {
-            Test-WSMan -ComputerName $_
+            Write-PPHost -Type Info -Message "Checking if $($_.Name) has PowerShell Remoting enabled."
+            Test-WSMan -ComputerName $_ -ErrorAction SilentlyContinue
             $?
         }
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
     }
 }
 
@@ -465,26 +873,26 @@ function Get-PPDomain {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         if ($null -eq $Forest) {
             $Forest = Get-PPForest
         }
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..." 
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..." 
         $Forest.Domains | ForEach-Object {
             if ( $_.Forest -and ($null -ne $_.DomainControllers) -and ($_.DomainControllers -ne '')) {
                 Write-Output $_
             }
             else {
-                Write-Warning "$($_.Name) is not reachable. PowerPUG! will not attempt to analyze it for PUG readiness."
+                Write-PPHost -Type Warning -Message "$($_.Name) is not reachable. PowerPUG! will not attempt to analyze it for PUG readiness."
             }
         }
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     }
 }
 
@@ -514,14 +922,14 @@ function Get-PPDomainAdminGroupSid {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         if ($null -eq $Domain) {
             $Domain = Get-PPDomain
         }
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         Write-Output $Domain -PipelineVariable loopdomain | ForEach-Object {
             if (-not $Domain.Sid) {
                 $DomainSid = Get-PPDomainSid -Domain $loopdomain
@@ -538,7 +946,7 @@ function Get-PPDomainAdminGroupSid {
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     }
 }
 
@@ -568,7 +976,7 @@ function Get-PPDomainKrbtgt {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         Add-Type -AssemblyName 'System.DirectoryServices.AccountManagement'
         if ($null -eq $Domain) {
             $Domain = Get-PPDomain
@@ -576,7 +984,7 @@ function Get-PPDomainKrbtgt {
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $Domain | ForEach-Object {
             $PrincipalContext = [System.DirectoryServices.AccountManagement.PrincipalContext]::New('Domain', $_.Name)
             if (-not $Domain.Sid) {
@@ -591,7 +999,7 @@ function Get-PPDomainKrbtgt {
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     }
 }
 
@@ -622,7 +1030,7 @@ function Get-PPDomainPugCreatedDate {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         Add-Type -AssemblyName 'System.DirectoryServices.AccountManagement'
         if ($null -eq $Domain) {
             $Domain = Get-PPDomain
@@ -630,7 +1038,7 @@ function Get-PPDomainPugCreatedDate {
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $Domain | Where-Object PugExists | ForEach-Object {
             if (-not $_.PugSid) {
                 $PugSid = Get-PPDomainPugSid -Domain $_
@@ -645,7 +1053,7 @@ function Get-PPDomainPugCreatedDate {
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     }
 }
 
@@ -674,14 +1082,14 @@ function Get-PPDomainPugSid {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         if ($null -eq $Domain) {
             $Domain = Get-PPDomain
         }
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         Write-Output $Domain -PipelineVariable loopdomain | ForEach-Object {
             if (-not $Domain.Sid) {
                 $DomainSid = Get-PPDomainSid -Domain $_
@@ -698,7 +1106,7 @@ function Get-PPDomainPugSid {
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     }
 }
 
@@ -729,14 +1137,14 @@ function Get-PPDomainSid {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         if ($null -eq $Domain) {
             $Domain = Get-PPDomain
         }
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $Domain | Where-Object { $_.Forest -and $_.DomainControllers } | ForEach-Object {
             $DomainKrbtgtSid = [System.Security.Principal.NTAccount]::New($_.Name, 'krbtgt').Translate([System.Security.Principal.SecurityIdentifier]).Value 
             $DomainSid = [System.Security.Principal.SecurityIdentifier]::New($DomainKrbtgtSid.Substring(0, $DomainKrbtgtSid.length - 4))
@@ -746,7 +1154,7 @@ function Get-PPDomainSid {
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     }
 }
 
@@ -776,11 +1184,11 @@ function Test-PPDomainFL {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
     }
     
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $Domain | ForEach-Object {
             if ($_.DomainModeLevel -ge 6) {
                 Write-Output $true 
@@ -821,12 +1229,12 @@ function Test-PPDomainPugExists {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         Add-Type -AssemblyName 'System.DirectoryServices.AccountManagement'
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $Domain | ForEach-Object {
             $PugExists = $false
             if (-not $_.PugSid) {
@@ -849,7 +1257,7 @@ function Test-PPDomainPugExists {
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     }
 }
 
@@ -917,8 +1325,13 @@ function Get-PPEnvironment {
         $RemotingEnabled = Test-PPDCRemotingEnabled -DC $_
         $_ | Add-Member -NotePropertyName RemotingEnabled -NotePropertyValue $RemotingEnabled -Force
         if ($_.RemotingEnabled) {
-            $AuditingConfiguration = Get-PPDCLogConfiguration -DC $_
-            $AuditingEnabled = Test-PPDCLogConfiguration -Configuration $AuditingConfiguration
+            try {
+                $AuditingConfiguration = Get-PPDCLogConfiguration -DC $_
+                $AuditingEnabled = Test-PPDCLogConfiguration -Configuration $AuditingConfiguration
+            }
+            catch {
+                $AuditingEnabled = $false
+            }
             $_ | Add-Member -NotePropertyName AuditingEnabled -NotePropertyValue $AuditingEnabled -Force
             if ($_.AuditingEnabled) {
                 $NtlmLogons = Get-PPDCNtlmLogon -DC $_
@@ -927,13 +1340,16 @@ function Get-PPEnvironment {
                 $_ | Add-Member -NotePropertyName WeakKerberosLogons -NotePropertyValue $WeakKerberosLogons -Force
             }
             else {
-                Write-Warning "Logon auditing is not enabled on $($_.Name). PowerPUG! will not attempt to check it for weak authentication."
+                Write-PPHost -Type Warning -Message "Logon auditing is not enabled on $($_.Name). PowerPUG! will not attempt to check it for weak authentication."
             }
         }
         else {
-            Write-Warning "Remoting is disabled on $($_.Name). PowerPUG! will not attempt to check it for weak authentication."
+            $_ | Add-Member -NotePropertyName AuditingEnabled -NotePropertyValue $false -Force
+            Write-PPHost -Type Warning -Message "Remoting is disabled on $($_.Name). PowerPUG! will not attempt to check it for weak authentication."
         }
     }
+    # Needed during weak logon checks
+    $DcsWithAuditingEnabled = $Dcs | Where-Object { $_.AuditingEnabled -eq $true }
     #endregion collect domain controller environmental info
 
     #region expand group membership
@@ -948,19 +1364,16 @@ function Get-PPEnvironment {
         $_ | Add-Member -NotePropertyName PugMember -NotePropertyValue $PugMember -Force
         $PasswordOlderThan1Year = Test-PPUserPasswordOlderThan1Year -User $_
         $_ | Add-Member -NotePropertyName PasswordOlderThan1Year -NotePropertyValue $PasswordOlderThan1Year -Force
-        # TODO figure out how to pass PugCreatedDate into this. Probably by enriching the Forest object. 
+        # TODO figure out how to pass PugCreatedDate into this. Probably by enriching the Domain object. 
         $PasswordOlderThanPug = Test-PPUserPasswordOlderThanPug -User $_
         $_ | Add-Member -NotePropertyName PasswordOlderThanPug -NotePropertyValue $PasswordOlderThanPug -Force
         # $_ | Add-Member -NotePropertyName Domain -NotePropertyValue $_.RootDomain -Force
-        #region fake
-        if (-not $PugMember) {
-            # $RecentNTLMLogon = ( (Get-Random -Maximum 100 -Minimum 1) -gt 50)
-            $RecentNTLMLogon = Test-PPUserNtlmLogon -User $_ -DC $Dcs
+        if ($_.PugMember -eq $false) {
+            $RecentNTLMLogon = Test-PPUserNtlmLogon -User $_ -DC ($Dcs | Where-Object { $_.AuditingEnabled -eq $true })
             $_ | Add-Member -NotePropertyName RecentNTLMLogon -NotePropertyValue $RecentNTLMLogon -Force
-            $RecentWeakKerberosLogon = ( (Get-Random -Maximum 100 -Minimum 1) -gt 50)
+            $RecentWeakKerberosLogon = Test-PPUserWeakKerberosLogon -User $_ -DC ($Dcs | Where-Object { $_.AuditingEnabled -eq $true })
             $_ | Add-Member -NotePropertyName RecentWeakKerberosLogon -NotePropertyValue $RecentWeakKerberosLogon -Force
         }
-        #endregion fake
     }
     
     Write-PPHost -Type Info -Message "Collecting Domain Admin Group Membership"
@@ -980,14 +1393,12 @@ function Get-PPEnvironment {
         # TODO figure out how to pass PugCreatedDate into this. Probably by enriching the Domain object. 
         $PasswordOlderThanPug = Test-PPUserPasswordOlderThanPug -User $_
         $_ | Add-Member -NotePropertyName PasswordOlderThanPug -NotePropertyValue $PasswordOlderThanPug -Force
-        #region fake
         if (-not $PugMember) {
-            $RecentNTLMLogon = ( (Get-Random -Maximum 100 -Minimum 1) -gt 50)
+            $RecentNTLMLogon = Test-PPUserNtlmLogon -User $_ -DC ($Dcs | Where-Object { $_.AuditingEnabled -eq $true })
             $_ | Add-Member -NotePropertyName RecentNTLMLogon -NotePropertyValue $RecentNTLMLogon -Force
-            $RecentWeakKerberosLogon = ( (Get-Random -Maximum 100 -Minimum 1) -gt 50)
+            $RecentWeakKerberosLogon = Test-PPUserWeakKerberosLogon -User $_ -DC ($Dcs | Where-Object { $_.AuditingEnabled -eq $true })
             $_ | Add-Member -NotePropertyName RecentWeakKerberosLogon -NotePropertyValue $RecentWeakKerberosLogon -Force
         }
-        #endregion fake
     }
     #endregion expand group
     #endregion collection and enrichment
@@ -1187,13 +1598,9 @@ If the DFL is Server 2008-2012, the Protected Users Group can be created in that
 
     Write-PPHost -Type Title -Message "AD Admin PUG Membership"
     Write-PPHost -Type Subtitle -Message @"
-AD Admins are members of the builtin domain Administrators, Domain Admins, Enterpise Admins, and/or Schema Admins groups.
-All AD Admin *users* should be members of the Protected Users Group.
-*Service accounts and computer accounts* should not be members of the Protected Users Group.
-
-Note: Service accounts and computer accounts should not be AD Admins at all,
-but maybe we fight that battle later?
-# TODO Add function to identify computers and service accounts in AD Admin groups.
+"AD Admins" are members of the builtin domain Administrators, Domain Admins, Enterpise Admins, and/or Schema Admins groups.
+    All AD Admin *users* should be members of the Protected Users Group.
+    *Service accounts and computer accounts* should not be members of the Protected Users Group.
 
 "@
     Write-PPHost -Type Info -Message "The following AD Admins are members of the Protected Users Group:"
@@ -1213,14 +1620,14 @@ but maybe we fight that battle later?
     }
     Read-Host 'Press Enter to Continue'
 
-    Write-PPHost -Type Title -Message "AD Admin Recent Password Changes"
+    Write-PPHost -Type Title -Message "AD Admin Password Age"
     Write-PPHost -Type Subtitle -Message @"
 Because the Protected User Group's protections are not configurable, it's crucial
-that all members of the group have changed their password since the domain was
-upgraded to Server 2008.
+    that all members of the group have changed their password since the domain was
+    upgraded to Server 2008.
 
-Additionally, regardless of NIST 800-63B guidance, AD Admins should have regular
-password changes. This check will alert on either condition.
+    Additionally, regardless of NIST 800-63B guidance, AD Admins should have regular
+    password changes. This check will alert on either condition.
 
 "@
     Write-PPHost -Type Info -Message "The following AD Admins have an old password that should be changed:"
@@ -1265,32 +1672,39 @@ Members of the Protected Users Group cannot use DES or RC4 encryption during aut
     }
     Read-Host 'Press Enter to Continue'
 
-    #     Write-PPHost -Type Title -Message "AD Admins That Cannot Be Added to the PUG"
-    #     Write-PPHost -Type Subtitle -Message @"
-    # AD Admins that meet any of the following conditions cannot be added to the Protected Users Group (and probably shouldn't be AD Admins at all):
-    #   - Computer accounts
-    #   - Service accounts (managed or otherwise)
-    # "@
-    #     Write-PPHost -Type Info -Message "The following AD Admins cannot be added to the Protected Users Group (and probably should be removed from AD Admin groups:"
-    #     $ADAdmins | Select-Object $SelectProperties | Sort-Object -Unique $SortProperties | ForEach-Object {
-    #         if (-not $_.PugMember -and ($_.PasswordOlderThanPug -or $_.RecentNTLMLogon -or $_.RecentWeakKerberosLogon) ) {
-    #         } elseif (-not $_.PugMember -and -not $_.PasswordOlderThanPug -and -not $_.RecentNTLMLogon -and -not $_.RecentWeakKerberosLogon) {
-    #             Write-PPHost -Type Success -Message "$($_.Domain)\$($_.SamAccountName)"
-    #         }
-    #     }
+    Write-PPHost -Type Title -Message "AD Admins That CANNOT Be Added to the PUG"
+    Write-PPHost -Type Subtitle -Message @"
+AD Admins that meet any of the following conditions cannot be added to the Protected Users Group (and probably shouldn't be AD Admins at all):
+  - Computer accounts
+  - Service accounts (managed or otherwise)
+
+"@
+    Write-PPHost -Type Info -Message "The following AD Admins cannot be added to the Protected Users Group (and probably should be removed from AD Admin groups:"
+    $ADAdmins | Select-Object $SelectProperties | Sort-Object -Unique $SortProperties | ForEach-Object {
+        if ($_.StructuralObjectClass -notmatch 'user|iNetOrgPerson') {
+            Write-PPHost -Type Error -Message "$($_.Domain)\$($_.SamAccountName)"
+        }
+    }
+    Read-Host 'Press Enter to Continue'
 
     Write-PPHost -Type Title -Message "AD Admins That Could Be Added to PUG Immediately"
     Write-PPHost -Type Subtitle -Message @"
 AD Admins that meet the following conditions can likely be added to the Protected Users Group:
+  - Is a user or iNetOrgPerson (not a computer or service account)
   - Have a password newer than the Protected User Group's creation date
   - Have had a recent logon
   - Have not used weak authentication methods during logon (NTLM, Kerberos DES/RC4)
+  
 "@
     Write-PPHost -Type Info -Message "The following AD Admins should be safe to add to the Protected Users Group immediately!"
     $ADAdmins | Select-Object $SelectProperties | Sort-Object -Unique $SortProperties | ForEach-Object {
         if (-not $_.PugMember -and ($_.PasswordOlderThanPug -or $_.RecentNTLMLogon -or $_.RecentWeakKerberosLogon) ) {
         }
-        elseif (-not $_.PugMember -and -not $_.PasswordOlderThanPug -and -not $_.RecentNTLMLogon -and -not $_.RecentWeakKerberosLogon) {
+        elseif (-not $_.PugMember -and 
+            -not $_.PasswordOlderThanPug -and 
+            -not $_.RecentNTLMLogon -and 
+            -not $_.RecentWeakKerberosLogon -and
+            $_.StructuralObjectClass -match 'user|iNetOrgPerson') {
             Write-PPHost -Type Success -Message "$($_.Domain)\$($_.SamAccountName)"
         }
     }
@@ -1323,17 +1737,17 @@ function Get-PPForest {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $Forest = [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
         Write-Output $Forest
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     } 
 }
 function Get-PPForestAdminGroupSid {
@@ -1362,14 +1776,14 @@ function Get-PPForestAdminGroupSid {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         if ($null -eq $Forest) {
             $Forest = Get-PPForest
         }
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $RootDomainSid = Get-PPDomainSid -Domain $Forest.RootDomain
         @("$RootDomainSid-518", "$RootDomainSid-519") | ForEach-Object {
             $AdaGroupSid = [System.Security.Principal.SecurityIdentifier]::New($_)
@@ -1379,7 +1793,7 @@ function Get-PPForestAdminGroupSid {
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     }
 }
 
@@ -1409,11 +1823,11 @@ function Test-PPForestFL {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
     }
     
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $Forest | ForEach-Object {
             if ($_.ForestModeLevel -ge 6) {
                 Write-Output $true 
@@ -1425,7 +1839,7 @@ function Test-PPForestFL {
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     }
 }
 
@@ -1456,12 +1870,12 @@ function Expand-PPGroupMembership {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         Add-Type -AssemblyName 'System.DirectoryServices.AccountManagement'
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         Write-Output $Sid -PipelineVariable groupsid | ForEach-Object {
             $PrincipalContext = [System.DirectoryServices.AccountManagement.PrincipalContext]::New('Domain', $groupsid.Domain)
             $GroupPrincipal = [System.DirectoryServices.AccountManagement.GroupPrincipal]::FindByIdentity($PrincipalContext, $groupsid.Value)
@@ -1472,13 +1886,13 @@ function Expand-PPGroupMembership {
                 }
             }
             catch {
-                Write-Warning "Group SID $($groupsid.Value) does not exist in $($groupsid.Domain)."
+                Write-PPHost -Type Warning -Message "Group SID $($groupsid.Value) does not exist in $($groupsid.Domain)."
             }
         }
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     }
 }
 function Test-PPUserNtlmLogon {
@@ -1510,7 +1924,7 @@ function Test-PPUserNtlmLogon {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         if ($null -eq $DC) {
             $DC = Get-PPDC
         }
@@ -1526,7 +1940,7 @@ function Test-PPUserNtlmLogon {
                         $_ | Add-Member -NotePropertyName NtlmLogons -NotePropertyValue $NtlmLogons -Force
                     }
                     else {
-                        Write-Warning "Logon auditing is not enabled on $($_.Name)"
+                        Write-PPHost -Type Warning -Message "Logon auditing is not enabled on $($_.Name)"
                     }
                 }
                 catch {
@@ -1536,14 +1950,12 @@ function Test-PPUserNtlmLogon {
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         Write-Output $User -PipelineVariable loopuser | ForEach-Object {
             $NtlmLogon = $false
             $DC | ForEach-Object {
-                while ($NtlmLogon -eq $false) {
-                    if ($_.NtlmLogons.Message -match $loopuser.Sid) {
-                        $NtlmLogon = $true
-                    }
+                if ($_.NtlmLogons.Message -match $loopuser.Sid) {
+                    $NtlmLogon = $true
                 }
             }
 
@@ -1552,7 +1964,7 @@ function Test-PPUserNtlmLogon {
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
     }
 }
 
@@ -1582,11 +1994,11 @@ function Test-PPUserPasswordOlderThan1Year {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $User | ForEach-Object {
             if ($_.LastPasswordSet -lt (Get-Date).AddDays(-365)) {
                 Write-Output $true
@@ -1598,7 +2010,7 @@ function Test-PPUserPasswordOlderThan1Year {
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     }
 }
 
@@ -1628,11 +2040,11 @@ function Test-PPUserPasswordOlderThanPug {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $User | ForEach-Object {
             $PugCreatedDate = Get-PPDomainPugCreatedDate -Domain $_.Domain
             if ($_.LastPasswordSet -lt $PugCreatedDate) {
@@ -1645,7 +2057,7 @@ function Test-PPUserPasswordOlderThanPug {
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     }
 }
 
@@ -1678,14 +2090,14 @@ function Test-PPUserPugMember {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         if ($null -eq $PugMembership) {
             $PugMembership = Get-PPForest | Get-PPDomain | Get-PPDomainPugSid | Expand-PPGroupMembership
         } 
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
         $User | ForEach-Object {
             if ($PugMembership -contains $_) {
                 Write-Output $true
@@ -1697,7 +2109,7 @@ function Test-PPUserPugMember {
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
     }
 }
 
@@ -1730,341 +2142,25 @@ function Test-PPUserWeakKerberosLogon {
     #requires -Version 5
 
     begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
     }
 
     process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
+        Write-Output $User -PipelineVariable loopuser | ForEach-Object {
+            $WeakKerberosLogon = $false
+            $DC | ForEach-Object {
+                if ($_.WeakKerberosLogons.Message -match $loopuser.Sid) {
+                    $WeakKerberosLogon = $true
+                }
+            }
+
+            $WeakKerberosLogon
+        }
     }
 
     end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
-    }
-}
-
-function Read-PPHost {
-    <#
-        .SYNOPSIS
-
-        .DESCRIPTION
-
-        .PARAMETER Parameter
-
-        .INPUTS
-
-        .OUTPUTS
-
-        .EXAMPLE
-
-        .LINK
-    #>
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory, Position = 0)]
-        $Message
-    )
-
-    #requires -Version 5
-
-    begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
-    }
-
-    process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
-        Read-Host -Prompt $(Write-Host "[?] $Message`n> " -ForegroundColor Blue -BackgroundColor DarkGray -NoNewline)
-    }
-}
-
-function Send-PPFunctionToRemote {
-    <#
-        .SYNOPSIS
-
-        .DESCRIPTION
-
-        .PARAMETER Parameter
-
-        .INPUTS
-
-        .OUTPUTS
-
-        .EXAMPLE
-
-        .LINK
-        https://matthewjdegarmo.com/powershell/2021/03/31/how-to-import-a-locally-defined-function-into-a-remote-powershell-session.html
-    #>
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory)]
-        [string[]]$FunctionName,
-        [Parameter(Mandatory, ValueFromPipeline)]
-        [ValidateNotNullOrEmpty()]
-        [object[]]$Session
-    )
-
-    #requires -Version 5
-
-    begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
-    }
-
-    process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
-        $FunctionName | ForEach-Object {
-            try {
-                $Function = Get-Command -Name $_
-                if ($Function) {
-                    $Definition = @"
-$($Function.CommandType) $_ {
-$($Function.Definition)
-}
-"@                  
-                    Invoke-Command -Session $Session -ScriptBlock {
-                        param($LoadMe)
-                        . ([scriptblock]::Create($LoadMe))
-                    } -ArgumentList $Definition
-                }
-            }
-            catch {
-                throw $_
-            }
-        }
-    }
-    
-    end {
-        Write-Verbose "Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
-    }
-}
-
-function Show-PPLogo {
-    <#
-        .SYNOPSIS
-
-        .DESCRIPTION
-
-        .PARAMETER Parameter
-
-        .INPUTS
-
-        .OUTPUTS
-
-        .EXAMPLE
-
-        .LINK
-    #>
-    param(
-        [string]$Version
-    )
-
-    # Write-Host '' -BackgroundColor Black -ForegroundColor Red -NoNewline
-    # Write-Host '' -BackgroundColor Black -ForegroundColor DarkYellow -NoNewline
-    # Write-Host '' -BackgroundColor Black -ForegroundColor Yellow -NoNewline
-    # Write-Host '' -BackgroundColor Black -ForegroundColor Green -NoNewline
-    # Write-Host '' -BackgroundColor Black -ForegroundColor DarkGreen -NoNewline
-    # Write-Host '' -BackgroundColor Black -ForegroundColor Blue -NoNewline
-    # Write-Host '' -BackgroundColor Black -ForegroundColor DarkBlue -NoNewline
-    # Write-Host '' -BackgroundColor Black -ForegroundColor Magenta -NoNewline
-    # Write-Host '' -BackgroundColor Black -ForegroundColor DarkMagenta -NoNewline
-    # Write-Host
-
-    Write-Host '                                                                '
-
-    Write-Host '  ______ ' -BackgroundColor Black -ForegroundColor Red -NoNewline
-    Write-Host '       ' -BackgroundColor Black -ForegroundColor DarkYellow -NoNewline
-    Write-Host '         ' -BackgroundColor Black -ForegroundColor Yellow -NoNewline
-    Write-Host '      ' -BackgroundColor Black -ForegroundColor Green -NoNewline
-    Write-Host '     ' -BackgroundColor Black -ForegroundColor DarkGreen -NoNewline
-    Write-Host ' ______ ' -BackgroundColor Black -ForegroundColor Blue -NoNewline
-    Write-Host '_______ ' -BackgroundColor Black -ForegroundColor DarkBlue -NoNewline
-    Write-Host '_______ ' -BackgroundColor Black -ForegroundColor Magenta -NoNewline
-    Write-Host '__  ' -BackgroundColor Black -ForegroundColor DarkMagenta -NoNewline
-    Write-Host
-    
-    Write-Host ' |   __ \' -BackgroundColor Black -ForegroundColor Red -NoNewline
-    Write-Host '.-----.' -BackgroundColor Black -ForegroundColor DarkYellow -NoNewline
-    Write-Host '--.--.--.' -BackgroundColor Black -ForegroundColor Yellow -NoNewline
-    Write-Host '-----.' -BackgroundColor Black -ForegroundColor Green -NoNewline
-    Write-Host '----.' -BackgroundColor Black -ForegroundColor DarkGreen -NoNewline
-    Write-Host '|   __ \' -BackgroundColor Black -ForegroundColor Blue -NoNewline
-    Write-Host '   |   |' -BackgroundColor Black -ForegroundColor DarkBlue -NoNewline
-    Write-Host '     __|' -BackgroundColor Black -ForegroundColor Magenta -NoNewline
-    Write-Host '  | ' -BackgroundColor Black -ForegroundColor DarkMagenta -NoNewline
-    Write-Host
-
-    Write-Host ' |    __/' -BackgroundColor Black -ForegroundColor Red -NoNewline
-    Write-Host '|  _  |' -BackgroundColor Black -ForegroundColor DarkYellow -NoNewline
-    Write-Host '  |  |  |' -BackgroundColor Black -ForegroundColor Yellow -NoNewline
-    Write-Host '  -__|' -BackgroundColor Black -ForegroundColor Green -NoNewline
-    Write-Host '   _|' -BackgroundColor Black -ForegroundColor DarkGreen -NoNewline
-    Write-Host '|    __/' -BackgroundColor Black -ForegroundColor Blue -NoNewline
-    Write-Host '   |   |' -BackgroundColor Black -ForegroundColor DarkBlue -NoNewline
-    Write-Host '    |  |' -BackgroundColor Black -ForegroundColor Magenta -NoNewline
-    Write-Host '__| ' -BackgroundColor Black -ForegroundColor DarkMagenta -NoNewline
-    Write-Host
-
-    Write-Host ' |___|   ' -BackgroundColor Black -ForegroundColor Red -NoNewline
-    Write-Host '|_____|' -BackgroundColor Black -ForegroundColor DarkYellow -NoNewline
-    Write-Host '________|' -BackgroundColor Black -ForegroundColor Yellow -NoNewline
-    Write-Host '_____|' -BackgroundColor Black -ForegroundColor Green -NoNewline
-    Write-Host '__|  ' -BackgroundColor Black -ForegroundColor DarkGreen -NoNewline
-    Write-Host '|___|  ' -BackgroundColor Black -ForegroundColor Blue -NoNewline
-    Write-Host '|_______|' -BackgroundColor Black -ForegroundColor DarkBlue -NoNewline
-    Write-Host '_______|' -BackgroundColor Black -ForegroundColor Magenta -NoNewline
-    Write-Host '__| ' -BackgroundColor Black -ForegroundColor DarkMagenta -NoNewline
-    Write-Host
-    Write-Host "                                    v2024.10.6    " -BackgroundColor Black -ForegroundColor Magenta
-    Write-Host '                                                        ' -BackgroundColor Black
-}
-function Show-PPOutro {
-    <#
-        .SYNOPSIS
-
-        .DESCRIPTION
-
-        .PARAMETER Parameter
-
-        .INPUTS
-
-        .OUTPUTS
-
-        .EXAMPLE
-
-        .LINK
-    #>
-    param(
-        [string]$Version
-    )
-
-    Read-Host 'Press Enter to Continue'
-    Write-Host @"
-     @@@@@@@@@@@@@@@@@@@@                                     @@@@@@@@@@@@@@@@@@@  
-    @@@@@@@@@@@@@@@@@@@&                                       @@@@@@@@@@@@@@@@@@@
-   @@@@@@@@@@@@@@@@@@                                            %@@@@@@@@@@@@@@@@@
-   @@@@@@@@@@@@@@@@                                                 @@@@@@@@@@@@@@@
-   @@@@@@@@@@@@@                                                      %@@@@@@@@@@@@
-   @@@@@@@@@@@         https://github.com/TrimarcJake/PowerPUG           @@@@@@@@@@
-   @@@@@@@@                                                                @@@@@@@@
-   @@@@@@                                                                     @@@@@
-   @@@           %@@@                                       @@@@                @@@
-                @@@@@                  @@@@@@@@#           @@@@(                   
-                @@@@@@.   ,@        @@@@@@@@@@@@@@        #@@@@@@    @@            
-                *@@@@@@@@@@,      @@@@@@@@@@@@@@@@@@@      @@@@@@@@@@@             
-                   @@@@@@      %@@@@@             @@@@@       @@@@@#               
-                             @@@@@@@@,           @@@@@@@@@                         
-                          (@@@@@@@@@@@@@      (@@@@@@@@@@@@@                       
-                        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%                    
-                     (@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                  
-                   @@@@@@@@@@@@@@@@@@@@@@@@.@@@@@@@@@@@@@@@@@@@@@@@&               
-                 @@@@@@@@@@@@@@@@@@@@@           @@@@@@@@@@@@@@@@@@@@,             
-                @@@@@@@@@@@@@@@@@@@                 @@@@@@@@@@@@@@@@@@             
-                *@@@@@@@@@@@@@@@@@@@.             @@@@@@@@@@@@@@@@@@@@             
-                 #@@@@@@@@@@@@@@@@@@@@@,       @@@@@@@@@@@@@@@@@@@@@@              
-                    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#
-"@ -ForegroundColor Magenta
-}
-function Write-PPHost {
-    <#
-        .SYNOPSIS
-
-        .DESCRIPTION
-
-        .PARAMETER Parameter
-
-        .INPUTS
-
-        .OUTPUTS
-
-        .EXAMPLE
-
-        .LINK
-    #>
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory, Position = 0)]
-        [ValidateSet('Info', 'Warning', 'Success', 'Error', 'Code', 'Remediation', 'Title', 'Subtitle')]
-        $Type,
-        [Parameter(Mandatory, Position = 1)]
-        $Message
-    )
-
-    #requires -Version 5
-
-    begin {
-        Write-Verbose "Starting $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
-        $ForegroundColor = $Host.UI.RawUI.ForegroundColor
-        $BackgroundColor = $Host.UI.RawUI.BackgroundColor
-    }
-
-    process {
-        Write-Verbose "Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
-        $Status = switch ($Type) {
-            'Info' {
-                @{
-                    Decoration      = '-'
-                    ForegroundColor = 'Cyan'
-                    BackgroundColor = $BackgroundColor
-                }
-            }
-            'Warning' {
-                @{
-                    Decoration      = '!'
-                    ForegroundColor = 'DarkYellow'
-                    BackgroundColor = $BackgroundColor
-                }
-            }
-            'Success' {
-                @{
-                    Decoration      = '+'
-                    ForegroundColor = 'Green'
-                    BackgroundColor = $BackgroundColor
-                }
-            }
-            'Error' {
-                @{
-                    Decoration      = 'X'
-                    ForegroundColor = 'Red'
-                    BackgroundColor = $BackgroundColor
-                }
-            }
-            'Code' {
-                @{
-                    Decoration      = '>'
-                    ForegroundColor = 'Black'
-                    BackgroundColor = 'Gray'
-                }
-            }
-            'Prompt' {
-                @{
-                    Decoration      = '?'
-                    ForegroundColor = 'Blue'
-                    BackgroundColor = 'Gray'
-                }
-            }
-            'Remediation' {
-                @{
-                    Decoration      = '~'
-                    ForegroundColor = 'DarkCyan'
-                    BackgroundColor = 'Gray'
-                }
-            }
-            'Title' {
-                @{
-                    Decoration      = '>'
-                    ForegroundColor = 'White'
-                    BackgroundColor = $BackgroundColor
-                }
-            }
-            'Subtitle' {
-                @{
-                    Decoration      = '>'
-                    ForegroundColor = 'DarkGray'
-                    BackgroundColor = $BackgroundColor
-                }
-            }
-        }
-
-        Write-Host "[$($Status.Decoration)] $Message" -ForegroundColor $Status.ForegroundColor -BackgroundColor $Status.BackgroundColor -NoNewline
-        Write-Host -ForegroundColor $ForegroundColor -BackgroundColor $BackgroundColor
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
     }
 }
 
@@ -2080,6 +2176,24 @@ function Invoke-PowerPUG {
     #region show logo
     Show-PPLogo -Version (Get-Date -Format yyyy.M.d)
     #endregion show logo
+
+    if (Test-PPIsDC) {
+        if (Test-PPIsElevated) {
+        }
+        else {
+            $Executable = if ($Host.Name -eq 'Windows PowerShell ISE Host') {
+                'powershell_ise.exe'
+            }
+            elseif ( ($Host.Name -eq 'ConsoleHost') -and ($Host.Version.Major -gt 6) ) {
+                'pwsh.exe'
+            }
+            else {
+                'powershell.exe'
+            }
+    
+            throw "When run on a DC, this script must be run in an elevated prompt. Please re-open $Executable using `"Run as Administrator`" and start this script again."
+        }
+    }
 
     $Environment = Get-PPEnvironment
     Test-PPEnvironment -Environment $Environment
