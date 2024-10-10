@@ -1,4 +1,4 @@
-function Read-PPHost {
+function Get-PPForest {
     <#
         .SYNOPSIS
 
@@ -14,10 +14,9 @@ function Read-PPHost {
 
         .LINK
     #>
+    # TODO Accept other forests in -ForestFQDN parameter
     [CmdletBinding()]
-    param (
-        [Parameter(Mandatory, Position = 0)]
-        $Message
+    param(
     )
 
     #requires -Version 5
@@ -28,6 +27,11 @@ function Read-PPHost {
 
     process {
         Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
-        Read-Host -Prompt $(Write-Host "[?] $Message`n> " -ForegroundColor Blue -BackgroundColor DarkGray -NoNewLine)
+        $Forest = [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
+        Write-Output $Forest
     }
+
+    end {
+        Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Finishing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."    
+    } 
 }
