@@ -9,7 +9,7 @@ PowerPUG! is designed to guide AD practitioners through PUG adoption by identify
 1. Open a PowerShell prompt and run `Install-Module -Name PowerPUG -Scope CurrentUser -Force`
 
 ### Install module manually from GitHub:
-1. Download the [latest module version](https://github.com/TrimarcJake/PowerPUG/releases/latest) ( **PowerPUG-v**\<YEAR\>**.**\<MONTH\>**.zip** )
+1. Download the [latest module version](https://github.com/TrimarcJake/PowerPUG/releases/latest/download/PowerPUG.zip).
 2. Extract the downloaded zip file
 3. Open a PowerShell prompt to the location of the extracted file and run `Import-Module PowerPUG.psd1`
 
