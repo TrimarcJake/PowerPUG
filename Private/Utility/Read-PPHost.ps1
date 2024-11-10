@@ -28,6 +28,7 @@ function Read-PPHost {
 
     process {
         Write-Verbose "[$(Get-Date -Format 'yyyy-MM-dd hh:mm:ss')] Processing $($MyInvocation.MyCommand) on $env:COMPUTERNAME..."
-        Read-Host -Prompt $(Write-Host "[?] $Message`n> " -ForegroundColor Blue -BackgroundColor DarkGray -NoNewLine)
+        Write-Host "[?] $Message" -ForegroundColor Blue -BackgroundColor DarkGray
+        Read-Host "> "
     }
 }
