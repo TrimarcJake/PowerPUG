@@ -316,7 +316,7 @@ AD Admins that meet the following conditions can likely be added to the Protecte
                 -not $_.RecentNTLMLogon -and 
                 -not $_.RecentWeakKerberosLogon -and
                 $_.StructuralObjectClass -match 'user|iNetOrgPerson') {
-                Write-PPHost -Type Code -Message "Add-ADGroupMember -Identity 'Protected Users' -Member '$($_.Domain)\$($_.SamAccountName)' -Server '$($_.Domain)'"
+                Write-PPHost -Type Code -Message "Add-ADGroupMember -Identity 'Protected Users' -Members '$($_.SamAccountName)' -Server '$($_.Domain)'"
             }
         }
         Write-Host
