@@ -86,11 +86,7 @@ Build-Module -ModuleName 'PowerPUG' {
 
     New-ConfigurationBuild -Enable:$true -SignModule:$false -DeleteTargetModuleBeforeBuild -MergeModuleOnBuild -MergeFunctionsFromApprovedModules -DoNotAttemptToFixRelativePaths
 
-    #New-ConfigurationArtefact -Type Unpacked -Enable -Path "$PSScriptRoot\..\Artefacts\Unpacked" #-RequiredModulesPath "$PSScriptRoot\..\Artefacts\Modules"
-    #New-ConfigurationArtefact -Type Packed -Enable -Path "$PSScriptRoot\..\Artefacts\Packed" -IncludeTagName
-    New-ConfigurationArtefact -Type Script -Enable -Path "$PSScriptRoot\..\Artefacts\Script" -ScriptName "Invoke-<ModuleName>.ps1" # -PreScriptMerge $PreScriptMerge -PostScriptMerge $PostScriptMerge
-    
-    # global options for publishing to github/psgallery
-    # New-ConfigurationPublish -Type PowerShellGallery -FilePath 'C:\Users\Administrator\Documents\PowerShellGalleryAPI.txt' -Enabled:$false
-    # New-ConfigurationPublish -Type GitHub -FilePath 'C:\Support\Important\GitHubAPI.txt' -UserName 'CompanyName' -Enabled:$false
+    New-ConfigurationArtefact -Type Packed -Enable -Path "$PSScriptRoot\..\Artefacts\Packed" -ArtefactName '<ModuleName>.zip'
+    New-ConfigurationArtefact -Type Script -Enable -Path "$PSScriptRoot\..\Artefacts\Script" -ScriptName "Invoke-<ModuleName>.ps1" # -PreScriptMerge $PreScriptMerge -PostScriptMerge $PostScriptMerge 
+    New-ConfigurationPublish -Type PowerShellGallery -FilePath 'C:\Users\jake.BLUETUXEDO\Documents\API Keys\PSGallery.txt'
 }
