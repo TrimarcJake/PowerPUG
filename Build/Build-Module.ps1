@@ -1,7 +1,28 @@
+param (
+    # A CalVer string if you need to manually override the default yyyy.M.d version string.
+    [string]$CalVer
+)
+
+if (Get-Module -Name 'PSPublishModule' -ListAvailable) {
+    Write-Information 'PSPublishModule is installed.'
+} else {
+    Write-Information 'PSPublishModule is not installed. Attempting installation.'
+    try {
+        Install-Module -Name Pester -AllowClobber -Scope CurrentUser -SkipPublisherCheck -Force
+        Install-Module -Name PSPublishModule -AllowClobber -Scope CurrentUser -Force
+    }
+    catch {
+        Write-Error 'PSPublishModule installation failed.'
+    }
+}
+
+Update-Module -Name PSPublishModule
+Import-Module -Name PSPublishModule -Force
+
 Build-Module -ModuleName 'PowerPUG' {
     # Usual defaults as per standard module
     $Manifest = [ordered] @{
-        ModuleVersion          = (Get-Date -Format yyyy.M.d)
+        ModuleVersion          = if ($Calver) {$CalVer} else {(Get-Date -Format yyyy.M.d)}
         CompatiblePSEditions   = @('Desktop', 'Core')
         GUID                   = '3f8afba8-e266-4a4b-9f09-b2d7ab35eba9'
         Author                 = 'Jake Hildreth'
